@@ -75,7 +75,7 @@ Vagrant.configure("2") do |config|
     sudo yum -y install epel-release
     sudo rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
     sudo yum remove php-*
-    sudo yum install -y --enablerepo=remi,remi-php72 php-cli  php-devel php-common php-pgsql php-pdo php-mbstring php-gd php-xml php-mcrypt php-memcached php-pear
+    sudo yum install -y --enablerepo=remi,remi-php72 php php-cli  php-devel php-common php-pgsql php-pdo php-mbstring php-gd php-xml php-mcrypt php-memcached php-pear
     rpm -qa | grep php
     php -v
 
@@ -88,8 +88,6 @@ Vagrant.configure("2") do |config|
     sudo rpm -Uvh https://download.postgresql.org/pub/repos/yum/9.6/redhat/rhel-7-x86_64/pgdg-centos96-9.6-3.noarch.rpm
     sudo yum install postgresql96-server postgresql96-test postgresql96-libs postgresql96-devel
     sudo /usr/pgsql-9.6/bin/postgresql96-setup initdb 
-    sudo systemctl enable postgresql-9.6
-    sudo systemctl start postgresql-9.6
 
     # 6) install pgroonga
     sudo yum install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
@@ -105,6 +103,17 @@ Vagrant.configure("2") do |config|
 
     # 9) set locale
     sudo localectl set-locale LANG=ja_JP.utf8
+
+    # ..) sleep
+    sleep 60
+
+    # 10)start apache
+    sudo systemctl start httpd
+    sudo systemctl enable httpd
+
+    # 11)start postgrsql
+    sudo systemctl start postgresql-9.6
+    sudo systemctl enable postgrsql-9.6
  
     # 10) echo finish message
     echo "provisioing is finished." 
