@@ -71,11 +71,11 @@ Vagrant.configure("2") do |config|
     # 2) install apache2.4
     sudo yum -y install httpd
 
-    # 3) install php7.x
+    # 3) install php7.2
     sudo yum -y install epel-release
     sudo rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
     sudo yum remove php-*
-    sudo yum install -y --enablerepo=remi,remi-php72 php php-cli  php-devel php-common php-pgsql php-pdo php-mbstring php-gd php-xml php-mcrypt php-memcached php-pear
+    sudo yum install -y --enablerepo=remi,remi-php72 php php-cli  php-devel php-common php-pdo php-mbstring php-gd php-xml php-mcrypt php-memcached php-pear
     rpm -qa | grep php
     php -v
 
@@ -84,14 +84,15 @@ Vagrant.configure("2") do |config|
     curl -sS https://getcomposer.org/installer | php
     sudo mv composer.phar /usr/local/bin/composer
 
-    # 5) install postgresql
-    sudo rpm -Uvh https://download.postgresql.org/pub/repos/yum/9.6/redhat/rhel-7-x86_64/pgdg-centos96-9.6-3.noarch.rpm
-    sudo yum install postgresql96-server postgresql96-test postgresql96-libs postgresql96-devel
-    sudo /usr/pgsql-9.6/bin/postgresql96-setup initdb 
+    # 5) install postgresql-10.7
+    sudo rpm -ivh https://download.postgresql.org/pub/repos/yum/10/redhat/rhel-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+    sudo yum install -y postgresql10-server postgresql10-devel 
+    sudo /usr/pgsql-10/bin/postgresql-setup initdb 
+    sudo yum install -y --enablerepo=remi,remi-php72 php-pgsql
 
     # 6) install pgroonga
     sudo yum install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
-    sudo yum install -y postgresql96-pgroonga
+    sudo yum install -y postgresql10-pgroonga
     sudo yum install -y groonga-tokenizer-mecab
 
     # 7) install additional packages.
@@ -112,8 +113,8 @@ Vagrant.configure("2") do |config|
     sudo systemctl enable httpd
 
     # 11)start postgrsql
-    sudo systemctl start postgresql-9.6
-    sudo systemctl enable postgrsql-9.6
+    sudo systemctl start postgresql-10
+    sudo systemctl enable postgrsql-10
  
     # 10) echo finish message
     echo "provisioing is finished." 
